@@ -1,0 +1,13 @@
+# Read the documentation: https://symfony.com/doc/current/bundles/FOSCKEditorBundle/index.html
+fos_ck_editor:
+  configs:
+    my_config:
+      jquery: true
+      toolbar: full
+      basicEntities: false;
+      entities: false;
+      uiColor:  "FF0000" ###"#2E8B57"
+      allowedContent: true
+
+
+

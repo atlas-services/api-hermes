@@ -47,6 +47,7 @@ class Template
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[OrderBy(["name" => "ASC"])]
     #[Groups(['template:read:collection', 'template:write:item'])]
     private ?string $type = null;
 
@@ -55,7 +56,7 @@ class Template
     #[Groups(['template:read:collection', 'template:write:item'])]
     private ?string $name = null;
 
-    #[ORM\Column(length: 2000)]
+    #[ORM\Column(type: "text",length: 2000)]
     #[Groups(['template:read:collection', 'template:write:item'])]
     private ?string $content = null;
 
@@ -96,7 +97,7 @@ class Template
 
     public function setContent(string $content): static
     {
-        $this->content = addslashes($content);
+        $this->content = $content;
 
         return $this;
     }

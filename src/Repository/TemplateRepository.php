@@ -21,6 +21,11 @@ class TemplateRepository extends ServiceEntityRepository
         parent::__construct($registry, Template::class);
     }
 
+    public function findAll()
+    {
+        return $this->findBy([], array('type' => 'ASC', 'name' => 'ASC'));
+    }
+
 //    /**
 //     * @return Template[] Returns an array of Template objects
 //     */
