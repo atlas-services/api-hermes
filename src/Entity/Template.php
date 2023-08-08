@@ -14,7 +14,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TemplateRepository::class)]
 #[ApiResource(
-    paginationItemsPerPage: 4,
+    order: ['type' => 'ASC'],
+    paginationItemsPerPage: 20,
     paginationClientEnabled: true,
     paginationClientItemsPerPage: true,
     normalizationContext: ['groups' => ['template:read:collection']],
@@ -47,7 +48,6 @@ class Template
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[OrderBy(["name" => "ASC"])]
     #[Groups(['template:read:collection', 'template:write:item'])]
     private ?string $type = null;
 
