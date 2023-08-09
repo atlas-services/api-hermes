@@ -4,6 +4,7 @@ fos_ck_editor:
     my_config:
       jquery: true
       toolbar: full
+      height: '100%'
       basicEntities: false;
       entities: false;
       uiColor:  "FF0000" ###"#2E8B57"

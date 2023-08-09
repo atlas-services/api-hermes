@@ -20,7 +20,7 @@ class TemplateType extends AbstractType
                 [
                     'config_name' => 'my_config',
                     'attr' => [
-                        'rows' => 30,
+                        'rows' => 65,
                     ]
                 ]
             )
