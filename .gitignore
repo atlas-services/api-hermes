@@ -9,6 +9,9 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
+/data
+!/data/db/.gitkeep
+
 ###> phpunit/phpunit ###
 /phpunit.xml
 .phpunit.result.cache

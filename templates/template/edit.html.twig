@@ -3,11 +3,13 @@
 {% block title %}Edit Template{% endblock %}
 
 {% block body %}
-    <h1>Edit Template</h1>
+    <div class="col-12 col-sm-10 mx-auto my-5">
+        <h1>Edit Template</h1>
 
-    {{ include('template/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('template/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_template_index') }}">back to list</a>
+        <a href="{{ path('app_template_index') }}">back to list</a>
 
-    {{ include('template/_delete_form.html.twig') }}
+        {{ include('template/_delete_form.html.twig') }}
+    </div>
 {% endblock %}
