@@ -19,9 +19,6 @@ class TemplateType extends AbstractType
             ->add('content', CKEditorType::class,
                 [
                     'config_name' => 'my_config',
-                    'attr' => [
-                        'rows' => 65,
-                    ]
                 ]
             )
         ;
