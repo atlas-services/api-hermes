@@ -92,6 +92,7 @@ class Template
 
     public function getContent(): ?string
     {
+        $this->content = str_replace('src="/images/api-hermes', 'src="https://api.hermes-cms.org/images/api-hermes', $this->content);
         return $this->content;
     }
 
