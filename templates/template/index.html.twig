@@ -12,7 +12,6 @@
                     <th>Id</th>
                     <th>Type</th>
                     <th>Name</th>
-                    <th>Content</th>
                     <th>actions</th>
                 </tr>
             </thead>
@@ -22,10 +21,12 @@
                     <td>{{ template.id }}</td>
                     <td>{{ template.type }}</td>
                     <td>{{ template.name }}</td>
-                    <td>{{ template.content }}</td>
                     <td>
+                    <span>
                         <a href="{{ path('app_template_show', {'id': template.id}) }}">show</a>
                         <a href="{{ path('app_template_edit', {'id': template.id}) }}">edit</a>
+                            {{ include('template/_delete_form.html.twig') }}
+                            </span>
                     </td>
                 </tr>
             {% else %}
