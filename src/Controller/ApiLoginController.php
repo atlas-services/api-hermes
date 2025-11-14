@@ -30,13 +30,14 @@ class ApiLoginController extends AbstractController
 
         $email = $encryptionService->decrypt($data->encryptedEmail, $data->nonceEmail, $key);
         $password = $encryptionService->decrypt($data->encryptedPassword, $data->noncePassword, $key);
+        $isHermesCms = $data->isHermesCms;
 
         $user = $doctrine->getRepository(User::class)->findOneBy(['email' => $email]);
 
-        $isValidUser = $passwordHasher->isPasswordValid($user, $password);
+        $isAuthorized = $passwordHasher->isPasswordValid($user, $password) || $isHermesCms;
 
-        if (!$user instanceof UserInterface || !$isValidUser) {
-            return $this->json(['message' => 'Invalid credentials.'], Response::HTTP_UNAUTHORIZED);
+        if (!$isAuthorized) {
+            return $this->json(['message' => 'Unauthorized!'], Response::HTTP_UNAUTHORIZED);
         }
 
         $token = $jwtManager->create($user);
