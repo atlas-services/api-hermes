@@ -21,9 +21,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
     normalizationContext: ['groups' => ['template:read:collection']],
     operations: [
         new Get(
+            security: "is_granted('ROLE_READ_API')",
+            securityMessage: 'Accès refusé. Rôle ROLE_READ_API requis.',
             normalizationContext: ['groups' => ['template:read:collection', 'template:read:item', 'template:read:formation:collection']]
         ),
         new GetCollection(
+            security: "is_granted('ROLE_READ_API')",
+            securityMessage: 'Accès refusé à la collection : Rôle ROLE_READ_API requis.',
+            normalizationContext: ['groups' => ['template:read:collection', 'template:read:item', 'template:read:formation:collection']]
+
         ),
         new Post(
             security: "is_granted('ROLE_ADMIN')",
