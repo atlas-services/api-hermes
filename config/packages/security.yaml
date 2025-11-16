@@ -21,6 +21,7 @@ security:
         api:
             pattern: ^/api
             stateless: true
+            provider: app_user_provider
             jwt: ~
         main:
             lazy: true
@@ -48,7 +49,7 @@ security:
     access_control:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         # - { path: ^/api,       roles: ROLE_READ_API , allow_if: "'local' == request.server.get('APP_ENV')" }
-        - { path: ^/api/,       roles: ROLE_READ_API  }
+        - { path: ^/api,       roles: ROLE_READ_API }
         - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 
