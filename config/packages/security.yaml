@@ -24,6 +24,14 @@ security:
             provider: app_user_provider
             jwt: ~
         main:
+            json_login:
+                check_path: /auth # The name in routes.yaml is enough for mapping
+                username_path: email
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        admin:
+            pattern: ^/admin
             lazy: true
             provider: app_user_provider
             custom_authenticator: App\Security\AppAuthenticator
@@ -47,6 +55,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/auth, roles: PUBLIC_ACCESS }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         # - { path: ^/api,       roles: ROLE_READ_API , allow_if: "'local' == request.server.get('APP_ENV')" }
         - { path: ^/api,       roles: ROLE_READ_API }

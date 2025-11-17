@@ -12,32 +12,25 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class ApiLoginController extends AbstractController
 {
     #[Route('/api/login', name: 'api_login', methods: ['POST'])]
     public function login(
         Request $request,
-        EncryptionService $encryptionService,
-        ManagerRegistry $doctrine,
-        UserPasswordHasherInterface $passwordHasher,
+        UserProviderInterface $userProvider,
         JWTTokenManagerInterface $jwtManager
     ): JsonResponse {
 
-        $data =  json_decode($request->getContent());
-        $key = base64_decode($data->key);
+        $email = $request->request->get('email'); // voir decrypt dans RequestSubscriber
+        $password = $request->request->get('password'); // voir decrypt dans RequestSubscriber
 
-        $email = $encryptionService->decrypt($data->encryptedEmail, $data->nonceEmail, $key);
-        $password = $encryptionService->decrypt($data->encryptedPassword, $data->noncePassword, $key);
-        $isHermesCms = $data->isHermesCms;
-
-        $user = $doctrine->getRepository(User::class)->findOneBy(['email' => $email]);
-
-        $isAuthorized = $passwordHasher->isPasswordValid($user, $password) || $isHermesCms;
-
-        if (!$isAuthorized) {
-            return $this->json(['message' => 'Unauthorized!'], Response::HTTP_UNAUTHORIZED);
+        $user = $userProvider->loadUserByIdentifier($email);
+        if (!$user || !password_verify($password, $user->getPassword())) {
+            throw new BadCredentialsException('Invalid credentials.');
         }
 
         $token = $jwtManager->create($user);
