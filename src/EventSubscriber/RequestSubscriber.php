@@ -31,8 +31,12 @@ class RequestSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
         if (strpos($request->getPathInfo(), '/api/templates') === 0) {
-            dump($request->headers);
-            dd($request->headers->get('Authorization'));
+             $this->logger->info('Request Headers api/templates : ', $request->headers->all());
+            $xapikey = $request->headers->get('x-api-key');
+            $authorization = $request->headers->get('authorization');
+            if(is_null($authorization)){
+                $request->headers->set('Authorization', $xapikey );
+            }
             return;
         }
 
