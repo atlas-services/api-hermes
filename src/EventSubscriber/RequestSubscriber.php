@@ -7,6 +7,8 @@ use SodiumException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Security\Http\SecurityEvents;
 
 class RequestSubscriber implements EventSubscriberInterface
 {
@@ -14,7 +16,10 @@ class RequestSubscriber implements EventSubscriberInterface
     {
         return [
             KernelEvents::REQUEST => ['onKernelRequest', 10],
+            SecurityEvents::INTERACTIVE_LOGIN => 'onInteractiveLogin',
         ];
+
+        
     }
 
     public function __construct(private EncryptionService $encryptionService, private LoggerInterface $logger)
@@ -29,6 +34,10 @@ class RequestSubscriber implements EventSubscriberInterface
         if (strpos($request->getPathInfo(), '/auth') === 0) {
             return;
         }
+        // if (strpos($request->getPathInfo(), '/api/templates') === 0) {
+        //     dd($request->headers);
+        //     return;
+        // }
 
         $data = json_decode($request->getContent(), true);
 
@@ -56,4 +65,25 @@ class RequestSubscriber implements EventSubscriberInterface
         }
 
     }
+
+
+    public function onInteractiveLogin(InteractiveLoginEvent $event)
+    {
+        $message = 'pas de user';
+        $user = $event->getAuthenticationToken()->getUser();
+        if(!is_null($user)){
+            $message = "email du user : " . $user->getEmail();
+        }
+        $this->logger->log('', " $message ");
+        // Loggez des informations sur l'utilisateur
+        // Utilisez le logger pour voir le nom d'utilisateur ou d'autres détails
+    }
+
+
+
+
+
+
+
+
 }
