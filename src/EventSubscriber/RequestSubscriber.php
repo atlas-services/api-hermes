@@ -37,9 +37,9 @@ class RequestSubscriber implements EventSubscriberInterface
             $authorization = $request->headers->get('authorization');
             $this->logger->info('Request Headers authorization : ',  [$authorization]);
             if(is_null($authorization)){
-                $request->headers->set('Authorization', $xapikey );
+                $request->headers->set('authorization', $xapikey );
             }
-            return;
+            $this->logger->info('Request Headers new header authorization : ',  [$authorization]);
         }
 
                 // Exclure la route /auth
@@ -47,30 +47,32 @@ class RequestSubscriber implements EventSubscriberInterface
             return;
         }
 
+        if (strpos($request->getPathInfo(), '/api/templates') !== 0) {
 
-        $data = json_decode($request->getContent(), true);
+            $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['email']) || !isset($data['password']) || !isset($data['nonceEmail']) || !isset($data['noncePassword'])) {
-            return;
-        }
-
-        try {
-
-            $key = base64_decode($data['key']);
-
-            $email = $this->encryptionService->decrypt($data['email'], $data['nonceEmail'], $key);
-            $password = $this->encryptionService->decrypt($data['password'], $data['noncePassword'], $key);
-
-            if ($email === false || $password === false) {
-                throw new \RuntimeException('Décryptage échoué');
+            if (!isset($data['email']) || !isset($data['password']) || !isset($data['nonceEmail']) || !isset($data['noncePassword'])) {
+                return;
             }
-            // Remplace les données chiffrées par les données déchiffrées
-            $request->request->set('email', $email);
-            $request->request->set('password', $password);
 
-        } catch (SodiumException $e) {
-            $this->logger->log('', " $email ko surement");
-            // Log error, ne pas exposer l'erreur à l'utilisateur
+            try {
+
+                $key = base64_decode($data['key']);
+
+                $email = $this->encryptionService->decrypt($data['email'], $data['nonceEmail'], $key);
+                $password = $this->encryptionService->decrypt($data['password'], $data['noncePassword'], $key);
+
+                if ($email === false || $password === false) {
+                    throw new \RuntimeException('Décryptage échoué');
+                }
+                // Remplace les données chiffrées par les données déchiffrées
+                $request->request->set('email', $email);
+                $request->request->set('password', $password);
+
+            } catch (SodiumException $e) {
+                $this->logger->log('', " $email ko surement");
+                // Log error, ne pas exposer l'erreur à l'utilisateur
+            }
         }
 
     }
