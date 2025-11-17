@@ -30,14 +30,17 @@ class RequestSubscriber implements EventSubscriberInterface
     public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
+        if (strpos($request->getPathInfo(), '/api/templates') === 0) {
+            dump($request->headers);
+            dd($request->headers->get('Authorization'));
+            return;
+        }
+
                 // Exclure la route /auth
         if (strpos($request->getPathInfo(), '/auth') === 0) {
             return;
         }
-        // if (strpos($request->getPathInfo(), '/api/templates') === 0) {
-        //     dd($request->headers);
-        //     return;
-        // }
+
 
         $data = json_decode($request->getContent(), true);
 
