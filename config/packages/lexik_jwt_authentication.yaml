@@ -4,3 +4,6 @@ lexik_jwt_authentication:
     pass_phrase: '%env(JWT_PASSPHRASE)%'
     token_ttl: 3600
     user_id_claim: email
+    token_extractors:
+        header:
+            header_name: 'x-api-token'
