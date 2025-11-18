@@ -16,7 +16,6 @@ class RequestSubscriber implements EventSubscriberInterface
     {
         return [
             KernelEvents::REQUEST => ['onKernelRequest', 10],
-            SecurityEvents::INTERACTIVE_LOGIN => 'onInteractiveLogin',
         ];
 
         
@@ -31,15 +30,12 @@ class RequestSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
         if (strpos($request->getPathInfo(), '/api/templates') === 0) {
-            $this->logger->info('Request Headers api/templates : ', $request->headers->all());
             $xapikey = $request->headers->get('x-api-key');
-            $this->logger->info('Request Headers x-api-key : ',  [$xapikey]);
             $authorization = $request->headers->get('authorization');
-            $this->logger->info('Request Headers authorization : ',  [$authorization]);
             if(is_null($authorization)){
                 $request->headers->set('authorization', $xapikey );
             }
-            $this->logger->info('Request Headers new header authorization : ',  [$authorization]);
+            $this->logger->info('Request Headers new header authorization : ',  [$request->headers->get('authorization')]);
         }
 
                 // Exclure la route /auth
@@ -76,25 +72,5 @@ class RequestSubscriber implements EventSubscriberInterface
         }
 
     }
-
-
-    public function onInteractiveLogin(InteractiveLoginEvent $event)
-    {
-        $message = 'pas de user';
-        $user = $event->getAuthenticationToken()->getUser();
-        if(!is_null($user)){
-            $message = "email du user : " . $user->getEmail();
-        }
-        $this->logger->log('', " $message ");
-        // Loggez des informations sur l'utilisateur
-        // Utilisez le logger pour voir le nom d'utilisateur ou d'autres détails
-    }
-
-
-
-
-
-
-
 
 }
