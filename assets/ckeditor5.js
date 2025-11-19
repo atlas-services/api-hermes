@@ -106,7 +106,6 @@ EnhancedEditor.defaultConfig = {
         'undo',
         'redo',
     ],
-    
     // Vous pouvez supprimer la ligne suivante si vous n'avez pas besoin de charger des traductions
     translations: [coreTranslations],
         heading: {
@@ -153,7 +152,7 @@ EnhancedEditor.defaultConfig = {
       ]
     },
     simpleUpload :{
-      uploadUrl: "/api/file/upload"
+      uploadUrl: "/ckeditor5api/file/upload"
 
     },
     mediaEmbed: {
