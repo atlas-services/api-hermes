@@ -6,8 +6,6 @@ use App\Entity\Template;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 class TemplateType extends AbstractType
 {
@@ -16,9 +14,10 @@ class TemplateType extends AbstractType
         $builder
             ->add('type')
             ->add('name')
-            ->add('content', CKEditorType::class,
+            ->add('content', CKEditor5Type::class,
                 [
-                    'config_name' => 'my_config',
+                'required' => false,
+                'label' => 'form.label.content',
                 ]
             )
         ;
