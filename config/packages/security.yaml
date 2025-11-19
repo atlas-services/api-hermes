@@ -24,6 +24,7 @@ security:
             provider: app_user_provider
             jwt: ~
         main:
+            pattern: ^/auth
             json_login:
                 check_path: /auth # The name in routes.yaml is enough for mapping
                 username_path: email
@@ -31,7 +32,6 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
         admin:
-            pattern: ^/admin
             lazy: true
             provider: app_user_provider
             custom_authenticator: App\Security\AppAuthenticator
